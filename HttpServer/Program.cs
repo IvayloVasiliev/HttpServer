@@ -23,12 +23,12 @@ namespace SandBox
             //    + "username=John&password=123456";
             //HttpRequest httpRequest = new HttpRequest(request);
 
-            HttpResponse responce = new HttpResponse(HttpResponseStatusCode.InternalServerError);
-            responce.AddHeader(new HttpHeader("Host", "localhost:12345"));
-            responce.AddHeader(new HttpHeader("Date", DateTime.Now.ToString(CultureInfo.InvariantCulture)));
+                    //HttpResponse responce = new HttpResponse(HttpResponseStatusCode.InternalServerError);
+                    //responce.AddHeader(new HttpHeader("Host", "localhost:12345"));
+                    //responce.AddHeader(new HttpHeader("Date", DateTime.Now.ToString(CultureInfo.InvariantCulture)));
 
-            responce.Content = Encoding.UTF8.GetBytes("<h1> Hello World!</h1>");
-            Console.WriteLine(Encoding.UTF8.GetString(responce.GetBytes()));
+                    //responce.Content = Encoding.UTF8.GetBytes("<h1> Hello World!</h1>");
+                    //Console.WriteLine(Encoding.UTF8.GetString(responce.GetBytes()));
 
             //const string NewLine = "\r\n";
             //TcpListener tcpListener = new TcpListener(IPAddress.Loopback, 80);

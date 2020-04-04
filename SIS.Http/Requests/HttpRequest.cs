@@ -93,28 +93,42 @@
 
         private bool isValidRequestQueryString(string queryString, string[] queryParameters)
         {
-            throw new NotImplementedException();
+            CoreValidator.ThrowIfNullOrEmpty(queryString, nameof(queryString));
+
+            return true; //todo
+        }
+
+        private bool HasQueryString()
+        {
+            return this.Url.Split('?').Length > 1;
         }
 
         private void ParseRequestQueryParameters()
         {
             //?name="pesho"&id="11"
-            this.Url.Split('?', '#')[1]
+            if (this.HasQueryString())
+            {
+                this.Url
+                .Split('?', '#')[1]
                 .Split('&')
                 .Select(plainQueryParameter => plainQueryParameter.Split('='))
                 .ToList()
                 .ForEach(queryParameterKVP => this.QueryData.Add(queryParameterKVP[0], queryParameterKVP[1]));
+            }
         }
 
         private void ParseRequestFormDataParameters(string requestBody)
-        { 
-            requestBody
+        {
+            if (!string.IsNullOrEmpty(requestBody))
+            {
+                requestBody
                 .Split('&')
                 .Select(plainQueryParameter => plainQueryParameter.Split('='))
                 .ToList()
                 .ForEach(queryParameterKVP => this.FormData.Add(queryParameterKVP[0], queryParameterKVP[1]));
 
-            //TODO : Parse multiple parameters by name
+                //TODO : Parse multiple parameters by name
+            }
         }
 
         private void ParseRequestParameters(string requestBody)
