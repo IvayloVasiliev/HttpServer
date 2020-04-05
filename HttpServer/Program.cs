@@ -39,7 +39,7 @@ namespace SandBox
             #endregion
 
 
-            
+
             //TcpListener tcpListener = new TcpListener(IPAddress.Loopback, 80);
             //tcpListener.Start();
 
@@ -56,7 +56,6 @@ namespace SandBox
             using (NetworkStream stream = client.GetStream())
             {
                 var requestBytes = new byte[100000];
-                Thread.Sleep(10000);
 
                 int readBytes = await stream.ReadAsync(requestBytes, 0, requestBytes.Length);
                 var stringRequest = Encoding.UTF8.GetString(requestBytes, 0, readBytes);
@@ -68,6 +67,7 @@ namespace SandBox
                     
                 string responce = "HTTP/1.0 200 OK" + NewLine +
                                     "Content-Type: text/html" + NewLine +
+                                    "Set-Cookie: cookie1=test" + NewLine +
                                     "SERVER: MyCustomServer/1.0" + NewLine +
                                     $"Content-Lenght: {responceBody.Length}" + NewLine + NewLine +
                                     responceBody;

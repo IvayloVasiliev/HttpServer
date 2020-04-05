@@ -6,6 +6,7 @@
 
     using Routing.Contracts;
     using HTTP.Common;
+    using System.Threading.Tasks;
 
     public class Server
     {
@@ -29,10 +30,10 @@
             this.tcpListener = new TcpListener(IPAddress.Parse(LocalHostIpAddres), port);
         }
 
-        private void Listen(Socket client)
+        private async Task Listen(Socket client)
         {
             var connectionHandler = new ConnectionHandler(client, this.serverRoutingTable);
-            connectionHandler.ProcessRequest();
+            await connectionHandler.ProcessRequestAsync();
         }
 
         public void Run()
@@ -48,7 +49,7 @@
 
                 var client = this.tcpListener.AcceptSocket();
 
-                this.Listen(client);
+                Task.Run(() => this.Listen(client));
             }
         }
     }
