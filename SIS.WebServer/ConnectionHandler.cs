@@ -42,8 +42,6 @@
                     Console.WriteLine($"Processing: {httpRequest.RequestMethod} {httpRequest.Path}...");
 
                     httpResponce = this.HandleRequests(httpRequest);
-
-                    this.PrepareResponce(httpResponce);
                 }
             }
             catch (BadRequestException e)

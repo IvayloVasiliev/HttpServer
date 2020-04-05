@@ -17,6 +17,7 @@
 
             Server server = new Server(8000, serverRoutingTable);
             server.Run();
+            ;
         }
     }
 }
