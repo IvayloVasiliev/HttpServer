@@ -8,7 +8,7 @@
 
     public class HttpHeaderCollection : IHttpHeaderCollection
     {
-        private readonly Dictionary<string, HttpHeader> httpHeaders;
+        private Dictionary<string, HttpHeader> httpHeaders;
 
         public HttpHeaderCollection()
         {
@@ -36,7 +36,7 @@
             return this.httpHeaders[key];
         }
 
-        public override string ToString() => string.Join("\r\n",
+        public override string ToString() => string.Join(GlobalConstants.HttpNewLine,
              this.httpHeaders.Values.Select(header => header.ToString()));
     }
 }

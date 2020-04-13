@@ -30,7 +30,7 @@
             this.tcpListener = new TcpListener(IPAddress.Parse(LocalHostIpAddres), port);
         }
 
-        private async Task Listen(Socket client)
+        private async Task ListenAsync(Socket client)
         {
             var connectionHandler = new ConnectionHandler(client, this.serverRoutingTable);
             await connectionHandler.ProcessRequestAsync();
@@ -47,9 +47,10 @@
             {
                 Console.WriteLine($"Waiting for client...");
 
-                var client = this.tcpListener.AcceptSocket();
+                //var client = this.tcpListener.AcceptSocket();
+                var client = this.tcpListener.AcceptSocketAsync().GetAwaiter().GetResult();
 
-                Task.Run(() => this.Listen(client));
+                Task.Run(() => this.ListenAsync(client));
             }
         }
     }

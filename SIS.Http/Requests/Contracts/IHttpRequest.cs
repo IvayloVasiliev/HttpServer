@@ -4,7 +4,9 @@
 
     using Enums;
     using Headers.Contracts;
-    
+    using Cookies.Contracts;
+    using Sessions.Contracts;
+
     public interface IHttpRequest
     {
         string Path { get; }
@@ -15,8 +17,12 @@
 
         Dictionary<string, object> QueryData { get; }
 
+        IHttpCookieCollections Cookies { get; }
+
         IHttpHeaderCollection Headers { get; }
 
         HttpRequestMethod RequestMethod { get; }
+
+        IHttpSession Session { get; set; }
     }
 }

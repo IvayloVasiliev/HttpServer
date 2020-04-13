@@ -1,8 +1,10 @@
-﻿namespace SIS.HTTP.Responses.Contracts
+﻿ namespace SIS.HTTP.Responses.Contracts
 {
     using Enums;
     using Headers;
     using Headers.Contracts;
+    using Cookies;
+    using Cookies.Contracts;
 
     public interface IHttpResponse
     {
@@ -10,9 +12,13 @@
 
         IHttpHeaderCollection Headers { get; }
 
+        IHttpCookieCollections Cookies { get; }
+
         byte[] Content { get; set; }
 
         void AddHeader(HttpHeader header);
+
+        void AddCookie(HttpCookie cookie);
 
         byte[] GetBytes();
 
