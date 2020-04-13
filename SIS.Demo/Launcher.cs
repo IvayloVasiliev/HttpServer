@@ -13,7 +13,6 @@
         {
             using (var context = new DemoDbContext())
             {
-                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
             }
 

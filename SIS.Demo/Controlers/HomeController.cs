@@ -2,8 +2,6 @@
 {
     using HTTP.Requests.Contracts;
     using HTTP.Responses.Contracts;
-    using SIS.HTTP.Cookies;
-    using SIS.HTTP.Responses;
 
     public class HomeController : BaseController
     {
@@ -14,11 +12,6 @@
 
         public IHttpResponse Index(IHttpRequest httpRequest)
         {
-            //IHttpResponse newResponce = new HttpResponse();
-            //HttpCookie cookie = new HttpCookie("lang", "en");
-            //newResponce.AddCookie(cookie);
-            //return newResponce;
-
             return this.View();
         }
         
