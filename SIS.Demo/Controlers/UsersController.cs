@@ -1,7 +1,7 @@
-﻿using Demo.Data;
-using Demo.Models;
+﻿using IRunes.Data;
+using IRunes.Models;
 
-namespace SIS.Demo.Controlers
+namespace SIS.App.Controlers
 {
     using System.Linq;
 

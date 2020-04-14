@@ -1,4 +1,4 @@
-﻿namespace SIS.Demo.Controlers
+﻿namespace SIS.App.Controlers
 {
     using HTTP.Requests.Contracts;
     using HTTP.Responses.Contracts;

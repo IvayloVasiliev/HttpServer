@@ -1,8 +1,8 @@
-﻿namespace Demo.Data
+﻿namespace IRunes.Data
 {
     using Microsoft.EntityFrameworkCore;
 
-    using Demo.Models;
+    using IRunes.Models;
     
     public class DemoDbContext : DbContext
     {
@@ -15,7 +15,7 @@
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-4Q4QNM5\\SQLEXPRESS;Database=DemoDB;Integrated Security=True;");
+            optionsBuilder.UseSqlServer(DatabaseConfiguration.ConnectionString);
 
             base.OnConfiguring(optionsBuilder);
         }

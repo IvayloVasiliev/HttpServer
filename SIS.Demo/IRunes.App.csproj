@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Demo.Data\Demo.Data.csproj" />
-    <ProjectReference Include="..\Demo.Models\Demo.Models.csproj" />
+    <ProjectReference Include="..\Demo.Data\IRunes.Data.csproj" />
+    <ProjectReference Include="..\Demo.Models\IRunes.Models.csproj" />
     <ProjectReference Include="..\SIS.Http\SIS.HTTP.csproj" />
     <ProjectReference Include="..\SIS.WebServer\SIS.WebServer.csproj" />
   </ItemGroup>
@@ -29,6 +29,12 @@
     <None Update="Views\Users\Login.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Views\Albums\" />
+    <Folder Include="Views\Tracks\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace Demo.Models
+﻿namespace IRunes.Models
 {
     public class User
     {

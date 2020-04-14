@@ -15,6 +15,8 @@
     using Routing.Contracts;
     using HTTP.Cookies;
     using WebServer.Sessions;
+    using System.Reflection;
+    using System.IO;
 
     public class ConnectionHandler
     {
@@ -125,12 +127,33 @@
             return new HttpRequest(result.ToString());
         }
 
+        private IHttpResponse ReturnIfResource(IHttpRequest httpRequest)
+        {
+            string folderPrefix = "/../../../../";
+            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            string resourceFolderPath = "Resources/";
+            string requestedResource = httpRequest.Path;
+
+            string fullPathToResource = assemblyLocation + folderPrefix 
+                                                + resourceFolderPath + requestedResource;
+
+            if (File.Exists(fullPathToResource)) 
+            {
+                byte[] content = File.ReadAllBytes(fullPathToResource);
+                return new InlineResourceResult(content, HttpResponseStatusCode.Found);
+            }
+            else
+            {
+                return new TextResult($"Route with method {httpRequest.RequestMethod} and path" +
+                  $"\"{httpRequest.Path}\" not found", HttpResponseStatusCode.NotFound);
+            }          
+        }
+
         private IHttpResponse HandleRequests(IHttpRequest httpRequest)
         {
             if (!this.serverRoutingTable.Contains(httpRequest.RequestMethod, httpRequest.Path))
             {
-                return new TextResult($"Route with method {httpRequest.RequestMethod} and path" +
-                    $"\"{httpRequest.Path}\" not found", HttpResponseStatusCode.NotFound);
+                return this.ReturnIfResource(httpRequest);
             }
 
             return this.serverRoutingTable.Get(httpRequest.RequestMethod, httpRequest.Path)
