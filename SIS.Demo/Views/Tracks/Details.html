@@ -19,10 +19,10 @@
                             <a href="/">Home</a>
                         </li>
                         <li>
-                            <a href="/Users/Login">Login</a>
+                            <a href="/Albums/All">Albums</a>
                         </li>
                         <li>
-                            <a href="/Users/Register">Register</a>
+                            <a href="/Users/Logout">Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -30,11 +30,10 @@
         </header>
         <hr style="height: 2px" />
         <main>
+            {{{track}}}
+            <hr />
             <div>
-                <h1>Welcome to IRunes</h1>
-                <hr style="height: 2px" />
-                <h2><a href="/Users/Login">Login</a> if you have an account.</h2>
-                <h2><a href="/Users/Register">Register</a> if you don't.</h2>
+                <a href="/Albums/Details?id={{{albumId}}}">Back To Album</a>
             </div>
         </main>
         <hr style="height: 2px" />

@@ -127,37 +127,37 @@
 
         private void ParseRequestFormDataParameters(string requestBody)
         {
-            if (!string.IsNullOrEmpty(requestBody))
-            {
-                requestBody
-                .Split('&')
-                .Select(plainQueryParameter => plainQueryParameter.Split('='))
-                .ToList()
-                .ForEach(queryParameterKVP => this.FormData.Add(queryParameterKVP[0], queryParameterKVP[1]));
-            }
+            //if (!string.IsNullOrEmpty(requestBody))
+            //{
+            //    requestBody
+            //    .Split('&')
+            //    .Select(plainQueryParameter => plainQueryParameter.Split('='))
+            //    .ToList()
+            //    .ForEach(queryParameterKVP => this.FormData.Add(queryParameterKVP[0], queryParameterKVP[1]));
+            //}
 
             //TODO : Parse multiple parameters by name
 
-            //if (string.IsNullOrEmpty(requestBody) == false)
-            //{
-            //    var paramsPairs = requestBody
-            //       .Split('&')
-            //       .Select(plainQueryParameter => plainQueryParameter.Split('='))
-            //       .ToList();
+            if (string.IsNullOrEmpty(requestBody) == false)
+            {
+                var paramsPairs = requestBody
+                   .Split('&')
+                   .Select(plainQueryParameter => plainQueryParameter.Split('='))
+                   .ToList();
 
-            //    foreach (var paramPair in paramsPairs)
-            //    {
-            //        string key = paramPair[0];
-            //        string value = paramPair[1];
+                foreach (var paramPair in paramsPairs)
+                {
+                    string key = paramPair[0];
+                    string value = paramPair[1];
 
-            //        if (this.FormData.ContainsKey(key) == false)
-            //        {
-            //            this.FormData.Add(key, new HashSet<string>());
-            //        }
+                    if (this.FormData.ContainsKey(key) == false)
+                    {
+                        this.FormData.Add(key, new HashSet<string>());
+                    }
 
-            //        ((ISet<string>)this.FormData[key]).Add(value);
-            //    }
-            //}
+                    ((ISet<string>)this.FormData[key]).Add(value);
+                }
+            }
         }
 
         private void ParseRequestParameters(string requestBody)

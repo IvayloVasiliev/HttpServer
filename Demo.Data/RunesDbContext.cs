@@ -4,11 +4,13 @@
 
     using IRunes.Models;
     
-    public class DemoDbContext : DbContext
+    public class RunesDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<Track> Tracks { get; set; }
+        public DbSet<Album> Albums { get; set; }
 
-        public DemoDbContext()
+        public RunesDbContext()
         {
 
         }
@@ -25,6 +27,17 @@
             modelBuilder.Entity<User>()
                 .Property(user => user.Id)
                 .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Track>()
+             .Property(track => track.Id)
+             .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Album>()
+             .Property(album => album.Id)
+             .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Album>()
+                .HasMany(album => album.Tracks);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -1,28 +1,19 @@
-﻿namespace SIS.App.Controlers
+﻿namespace IRunes.App.Controlers
 {
-    using HTTP.Requests.Contracts;
-    using HTTP.Responses.Contracts;
+    using SIS.HTTP.Requests.Contracts;
+    using SIS.HTTP.Responses.Contracts;
 
     public class HomeController : BaseController
     {
-        public HomeController(IHttpRequest httpRequest)
-        {
-            this.HttpRequest = httpRequest;
-        }
-
         public IHttpResponse Index(IHttpRequest httpRequest)
         {
-            return this.View();
-        }
-        
-        public IHttpResponse Home(IHttpRequest httpRequest)
-        {
-            if (!this.IsLoggedIn())
+            if (this.IsLoggedIn(httpRequest))
             {
-                return this.Redirect("/login");
+                this.ViewData["Username"] = httpRequest.Session.GetParameter("username");
+
+                return this.View("Home");
             }
-            
-            this.ViewData["Username"] = this.HttpRequest.Session.GetParameter("username");
+
             return this.View();
         }
     }

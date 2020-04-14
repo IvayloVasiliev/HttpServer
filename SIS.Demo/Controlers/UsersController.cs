@@ -1,15 +1,25 @@
-﻿using IRunes.Data;
-using IRunes.Models;
-
-namespace SIS.App.Controlers
+﻿namespace IRunes.App.Controlers
 {
     using System.Linq;
 
-    using HTTP.Requests.Contracts;
-    using HTTP.Responses.Contracts;
-    
+    using SIS.HTTP.Requests.Contracts;
+    using SIS.HTTP.Responses.Contracts;
+    using IRunes.Data;
+    using IRunes.Models;
+    using System.Collections.Generic;
+    using System.Security.Cryptography;
+    using System.Text;
+
     public class UsersController : BaseController
     {
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256hash = SHA256.Create())
+            {
+                return Encoding.UTF8.GetString(sha256hash.ComputeHash(Encoding.UTF8.GetBytes(password)));
+            }
+        }
+
         public IHttpResponse Login(IHttpRequest httpRequest)
         {
             return this.View();
@@ -18,24 +28,25 @@ namespace SIS.App.Controlers
         public IHttpResponse LoginConfirm(IHttpRequest httpRequest)
         {
 
-            using (var context = new DemoDbContext())
+            using (var context = new RunesDbContext())
             {
-                string username = httpRequest.FormData["username"].ToString();
-                string password = httpRequest.FormData["password"].ToString();
+                string username = ((ISet<string>)httpRequest.FormData["username"]).FirstOrDefault();
+                string password = ((ISet<string>)httpRequest.FormData["password"]).FirstOrDefault();
 
                 User userFromDb = context.Users
                     .SingleOrDefault(user => user.Username == username
-                                    && user.Password == password);
+                                            || user.Email == username         
+                                            && user.Password == this.HashPassword(password));
 
                 if (userFromDb == null)
                 {
-                    return this.Redirect("/login");
+                    return this.Redirect("/Users/Login");
                 }
 
-                httpRequest.Session.AddParameter("username", userFromDb.Username);
+                this.SignIn(httpRequest, userFromDb);
             }
 
-            return this.Redirect("/home");
+            return this.Redirect("/");
         }
 
         public IHttpResponse Register(IHttpRequest httpRequest)
@@ -45,33 +56,35 @@ namespace SIS.App.Controlers
 
         public IHttpResponse RegisterConfirm(IHttpRequest httpRequest)
         {
-            using (var context = new DemoDbContext())
+            using (var context = new RunesDbContext())
             {
-                string username = httpRequest.FormData["username"].ToString();
-                string password = httpRequest.FormData["password"].ToString();
-                string confirmPassword = httpRequest.FormData["confirmPassword"].ToString();
+                string username = ((ISet<string>)httpRequest.FormData["username"]).FirstOrDefault();
+                string password = ((ISet<string>)httpRequest.FormData["password"]).FirstOrDefault();
+                string confirmPassword = ((ISet<string>)httpRequest.FormData["confirmPassword"]).FirstOrDefault();
+                string email = ((ISet<string>)httpRequest.FormData["email"]).FirstOrDefault();
 
                 if (password != confirmPassword)
                 {
-                    return this.Redirect("/register");
+                    return this.Redirect("/Users/Register");
                 }
 
                 User user = new User
                 { 
                     Username = username,
-                    Password = password
+                    Password = HashPassword(password),
+                    Email = email
                 };
 
                 context.Users.Add(user);
                 context.SaveChanges(); 
             }
 
-            return this.Redirect("/login");
+            return this.Redirect("/Users/Login");
         }
 
         public IHttpResponse Logout(IHttpRequest httpRequest)
         {
-            httpRequest.Session.ClearParameters();
+            this.SignOut(httpRequest);
             return this.Redirect("/");
         }
     }

@@ -1,24 +1,24 @@
-﻿namespace SIS.App.Controlers
+﻿namespace IRunes.App.Controlers
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Runtime.CompilerServices;
 
-    using HTTP.Enums;
-    using HTTP.Responses.Contracts;
+    using SIS.HTTP.Enums;
+    using SIS.HTTP.Responses.Contracts;
     using SIS.HTTP.Requests.Contracts;
-    using WebServer.Results;
+    using SIS.WebServer.Results;
+    using SIS.HTTP.Requests;
+    using IRunes.Models;
 
     public abstract class BaseController
     {
-        protected IHttpRequest HttpRequest { get; set; }
-
-        protected Dictionary<string, object> ViewData = new Dictionary<string, object>();
-
-        protected bool IsLoggedIn()
+        protected BaseController()
         {
-            return this.HttpRequest.Session.ContainsParameter("username");
+            this.ViewData = new Dictionary<string, object>();
         }
+
+        protected Dictionary<string, object> ViewData;
 
         private string ParseTemplate(string viewContent)
         {
@@ -29,8 +29,13 @@
      
             return viewContent;
         }
- 
-        public IHttpResponse View([CallerMemberName] string view = null)
+
+        protected bool IsLoggedIn(IHttpRequest httpRequest)
+        {
+            return httpRequest.Session.ContainsParameter("username");
+        }
+
+        protected IHttpResponse View([CallerMemberName] string view = null)
         {
             string controllerName = this.GetType().Name.Replace("Controller", string.Empty);
             string viewName = view;
@@ -44,10 +49,22 @@
             return htmlResult;
         }
 
-        public IHttpResponse Redirect(string url)
+        protected IHttpResponse Redirect(string url)
         {
             return new RedirectResult(url);        
         }
 
+        protected void SignIn(IHttpRequest httpRequest, User user)
+        {
+            httpRequest.Session.AddParameter("id", user.Id);
+            httpRequest.Session.AddParameter("username", user.Username);
+            httpRequest.Session.AddParameter("email", user.Email);
+            
+        }
+
+        protected void SignOut(IHttpRequest httpRequest)
+        {
+            httpRequest.Session.ClearParameters();
+        }
     }
 }
