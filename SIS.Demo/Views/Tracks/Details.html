@@ -30,10 +30,10 @@
         </header>
         <hr style="height: 2px" />
         <main>
-            {{{track}}}
-            <hr />
+            @Model.Track
+            <hr style="height: 2px" />
             <div>
-                <a href="/Albums/Details?id={{{albumId}}}">Back To Album</a>
+                <a href="/Albums/Details?id=@Model.AlbumId">Back To Album</a>
             </div>
         </main>
         <hr style="height: 2px" />
