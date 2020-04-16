@@ -1,4 +1,4 @@
-﻿namespace SIS.WebServer
+﻿namespace SIS.MvcFramework
 {
     using System;
     using System.Net;
@@ -45,9 +45,8 @@
 
             while (this.isRunning)
             {
-                Console.WriteLine($"Waiting for client...");
-
-                //var client = this.tcpListener.AcceptSocket();
+              
+               
                 var client = this.tcpListener.AcceptSocketAsync().GetAwaiter().GetResult();
 
                 Task.Run(() => this.ListenAsync(client));

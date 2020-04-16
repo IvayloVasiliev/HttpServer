@@ -1,4 +1,4 @@
-﻿    namespace SIS.WebServer
+﻿    namespace SIS.MvcFramework
 {
     using System;
     using System.Net.Sockets;
@@ -13,7 +13,7 @@
     using Results;
     using Routing;
     using HTTP.Cookies;
-    using WebServer.Sessions;
+    using MvcFramework.Sessions;
     using System.Reflection;
     using System.IO;
 

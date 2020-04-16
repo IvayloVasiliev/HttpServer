@@ -7,7 +7,7 @@
     using SIS.HTTP.Enums;
     using SIS.HTTP.Responses;
     using SIS.HTTP.Requests;
-    using SIS.WebServer.Results;
+    using SIS.MvcFramework.Results;
     using IRunes.Models;
 
     public abstract class BaseController

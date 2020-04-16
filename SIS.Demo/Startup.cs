@@ -3,28 +3,19 @@
     using IRunes.App.Controlers;
     using IRunes.Data;
     using SIS.HTTP.Enums;
-    using SIS.WebServer;
-    using SIS.WebServer.Results;
-    using SIS.WebServer.Routing;
+    using SIS.MvcFramework;
+    using SIS.MvcFramework.Results;
+    using SIS.MvcFramework.Routing;
 
-    public class Launcher
+    public class Startup : IMvcApplication
     {
-        public static void Main(string[] args)
+        public void Configure(ServerRoutingTable serverRoutingTable)
         {
             using (var context = new RunesDbContext())
             {
                 context.Database.EnsureCreated();
-            }
+            }            
 
-            ServerRoutingTable serverRoutingTable = new ServerRoutingTable();
-            Configure(serverRoutingTable);
-
-            Server server = new Server(8000, serverRoutingTable);
-            server.Run(); 
-        }
-
-        private static void Configure(ServerRoutingTable serverRoutingTable)
-        {
             #region Home Routs
             serverRoutingTable.Add(HttpRequestMethod.Get, "/", request => new RedirectResult("/Home/Index"));
             serverRoutingTable.Add(HttpRequestMethod.Get, "/Home/Index", request => new HomeController().Index(request));
@@ -40,9 +31,9 @@
             #endregion
 
             #region Albums Routs
-            serverRoutingTable.Add(HttpRequestMethod.Get, "/Albums/All", request => new AlbumsController().All(request));          
-            serverRoutingTable.Add(HttpRequestMethod.Get, "/Albums/Create", request => new AlbumsController().Create(request));          
-            serverRoutingTable.Add(HttpRequestMethod.Post, "/Albums/Create", request => new AlbumsController().CreateConfirm(request));          
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/Albums/All", request => new AlbumsController().All(request));
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/Albums/Create", request => new AlbumsController().Create(request));
+            serverRoutingTable.Add(HttpRequestMethod.Post, "/Albums/Create", request => new AlbumsController().CreateConfirm(request));
             serverRoutingTable.Add(HttpRequestMethod.Get, "/Albums/Details", request => new AlbumsController().Details(request));
             #endregion
 
@@ -54,7 +45,11 @@
 
             #endregion
 
+        }
 
+        public void ConfigureServices()
+        {
+ 
         }
     }
 }

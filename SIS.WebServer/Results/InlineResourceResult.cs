@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SIS.WebServer.Results
+namespace SIS.MvcFramework.Results
 {
     public class InlineResourceResult : HttpResponse
     {
