@@ -7,10 +7,8 @@
     using Enums;
 
     using Headers;
-    using Headers.Contracts;
-    using Requests.Contracts;
+    using Requests;
     using Exceptions;
-    using Cookies.Contracts;
     using Cookies;
     using SIS.HTTP.Sessions.Contracts;
 

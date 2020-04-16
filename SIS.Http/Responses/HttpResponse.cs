@@ -1,15 +1,11 @@
 ﻿namespace SIS.HTTP.Responses
 {
-    using System.Text;
-
     using Common;
     using Enums;
     using Extensions;
     using Headers;
-    using Headers.Contracts;
-    using Responses.Contracts;
     using SIS.HTTP.Cookies;
-    using SIS.HTTP.Cookies.Contracts;
+    using System.Text;
 
     public class HttpResponse : IHttpResponse
     { 

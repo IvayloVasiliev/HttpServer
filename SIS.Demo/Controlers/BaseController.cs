@@ -5,10 +5,9 @@
     using System.Runtime.CompilerServices;
 
     using SIS.HTTP.Enums;
-    using SIS.HTTP.Responses.Contracts;
-    using SIS.HTTP.Requests.Contracts;
-    using SIS.WebServer.Results;
+    using SIS.HTTP.Responses;
     using SIS.HTTP.Requests;
+    using SIS.WebServer.Results;
     using IRunes.Models;
 
     public abstract class BaseController

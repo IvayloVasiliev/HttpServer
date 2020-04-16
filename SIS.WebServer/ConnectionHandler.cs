@@ -9,10 +9,9 @@
     using HTTP.Enums;
     using HTTP.Exceptions;
     using HTTP.Requests;
-    using HTTP.Requests.Contracts;
-    using HTTP.Responses.Contracts;
+    using HTTP.Responses;
     using Results;
-    using Routing.Contracts;
+    using Routing;
     using HTTP.Cookies;
     using WebServer.Sessions;
     using System.Reflection;

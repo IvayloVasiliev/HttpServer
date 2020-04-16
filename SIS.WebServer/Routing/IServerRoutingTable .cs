@@ -1,10 +1,10 @@
-﻿namespace SIS.WebServer.Routing.Contracts
+﻿namespace SIS.WebServer.Routing
 {
     using System;
 
     using HTTP.Enums;
-    using HTTP.Requests.Contracts;
-    using HTTP.Responses.Contracts;
+    using HTTP.Requests;
+    using HTTP.Responses;
 
     public interface IServerRoutingTable
     {

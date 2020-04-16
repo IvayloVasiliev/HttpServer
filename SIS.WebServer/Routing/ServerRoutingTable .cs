@@ -5,9 +5,9 @@
 
     using HTTP.Common;
     using HTTP.Enums;
-    using HTTP.Requests.Contracts;
-    using HTTP.Responses.Contracts;
-    using Routing.Contracts;
+    using HTTP.Requests;
+    using HTTP.Responses;
+    using Routing;
 
     public class ServerRoutingTable : IServerRoutingTable
     {

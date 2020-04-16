@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
     using Common;
-    using Cookies.Contracts;
+    using Cookies;
 
 
     public class HttpCookieCollection : IHttpCookieCollections

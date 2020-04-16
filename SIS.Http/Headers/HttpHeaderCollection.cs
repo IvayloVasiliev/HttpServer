@@ -1,6 +1,6 @@
 ﻿namespace SIS.HTTP.Headers
 {
-    using Contracts;
+
     using System.Collections.Generic;
     using System.Linq;
 

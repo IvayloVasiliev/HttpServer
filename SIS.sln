@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Data", "Demo.Data\IR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Models", "Demo.Models\IRunes.Models.csproj", "{AED2C9C7-B8E6-42C0-A880-469127A664FE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{CFC42AC0-0EAA-4CE6-B0BA-977766337DCC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IRunes", "IRunes", "{97253703-496E-4916-B61C-220186BFFA0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +46,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1FA7E84D-8EB9-469A-B4FF-0D521415AF4F} = {97253703-496E-4916-B61C-220186BFFA0B}
+		{746C77A6-C15B-4FCD-B8B9-5B7068042799} = {97253703-496E-4916-B61C-220186BFFA0B}
+		{AED2C9C7-B8E6-42C0-A880-469127A664FE} = {97253703-496E-4916-B61C-220186BFFA0B}
+		{97253703-496E-4916-B61C-220186BFFA0B} = {CFC42AC0-0EAA-4CE6-B0BA-977766337DCC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4612F15D-FEBB-4C5D-83A8-DEEF27B9AEB5}
