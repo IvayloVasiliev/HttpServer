@@ -9,8 +9,10 @@
     using System.Collections.Generic;
     using System.Security.Cryptography;
     using System.Text;
+    using SIS.MvcFramework;
+    using SIS.MvcFramework.Attributes;
 
-    public class UsersController : BaseController
+    public class UsersController : Controller
     {
         private string HashPassword(string password)
         {
@@ -25,6 +27,7 @@
             return this.View();
         }
          
+        [HttpPost(ActionName ="Login")]
         public IHttpResponse LoginConfirm(IHttpRequest httpRequest)
         {
 
@@ -43,7 +46,7 @@
                     return this.Redirect("/Users/Login");
                 }
 
-                this.SignIn(httpRequest, userFromDb);
+                this.SignIn(httpRequest, userFromDb.Id, userFromDb.Username, userFromDb.Email);
             }
 
             return this.Redirect("/");
@@ -54,6 +57,7 @@
             return this.View();
         }
 
+        [HttpPost(ActionName = "Register")]
         public IHttpResponse RegisterConfirm(IHttpRequest httpRequest)
         {
             using (var context = new RunesDbContext())

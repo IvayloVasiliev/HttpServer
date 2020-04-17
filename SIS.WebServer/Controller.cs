@@ -1,4 +1,4 @@
-﻿namespace IRunes.App.Controlers
+﻿namespace SIS.MvcFramework
 {
     using System.Collections.Generic;
     using System.IO;
@@ -8,11 +8,11 @@
     using SIS.HTTP.Responses;
     using SIS.HTTP.Requests;
     using SIS.MvcFramework.Results;
-    using IRunes.Models;
 
-    public abstract class BaseController
+
+    public abstract class Controller
     {
-        protected BaseController()
+        protected Controller()
         {
             this.ViewData = new Dictionary<string, object>();
         }
@@ -43,7 +43,7 @@
 
             viewContent = this.ParseTemplate(viewContent);
 
-            HtmlResult htmlResult = new HtmlResult(viewContent, HttpResponseStatusCode.Ok);
+            HtmlResult htmlResult = new HtmlResult(viewContent);
 
             return htmlResult;
         }
@@ -53,11 +53,11 @@
             return new RedirectResult(url);        
         }
 
-        protected void SignIn(IHttpRequest httpRequest, User user)
+        protected void SignIn(IHttpRequest httpRequest, string id, string userName, string email)
         {
-            httpRequest.Session.AddParameter("id", user.Id);
-            httpRequest.Session.AddParameter("username", user.Username);
-            httpRequest.Session.AddParameter("email", user.Email);
+            httpRequest.Session.AddParameter("id", id);
+            httpRequest.Session.AddParameter("username", userName);
+            httpRequest.Session.AddParameter("email", email);
             
         }
 

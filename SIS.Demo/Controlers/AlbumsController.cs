@@ -6,10 +6,12 @@
     using Microsoft.EntityFrameworkCore;
     using SIS.HTTP.Requests;
     using SIS.HTTP.Responses;
+    using SIS.MvcFramework;
+    using SIS.MvcFramework.Attributes;
     using System.Collections.Generic;
     using System.Linq;
 
-    public class AlbumsController : BaseController
+    public class AlbumsController : Controller
     {
         public IHttpResponse All(IHttpRequest httpRequest)
         {
@@ -47,6 +49,7 @@
             return this.View();
         }
 
+        [HttpPost(ActionName ="Create")]
         public IHttpResponse CreateConfirm(IHttpRequest httpRequest)
         {
             if (!this.IsLoggedIn(httpRequest))
