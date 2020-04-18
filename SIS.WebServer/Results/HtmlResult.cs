@@ -1,12 +1,10 @@
 ﻿namespace SIS.MvcFramework.Results
 {
-    using System.Text;
-
     using HTTP.Enums;
     using HTTP.Headers;
-    using HTTP.Responses;
+    using System.Text;
 
-    public class HtmlResult : HttpResponse
+    public class HtmlResult : ActionResult
     {
         public HtmlResult(string content, HttpResponseStatusCode responseStatusCode = HttpResponseStatusCode.Ok)
             : base(responseStatusCode)

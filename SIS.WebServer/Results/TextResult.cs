@@ -1,12 +1,10 @@
 ﻿namespace SIS.MvcFramework.Results
 {
-    using System.Text;
-
     using HTTP.Enums;
     using HTTP.Headers;
-    using HTTP.Responses;
+    using System.Text;
 
-    public class TextResult : HttpResponse
+    public class TextResult : ActionResult
     {
         public TextResult(string content, HttpResponseStatusCode responceStatusCode, string contentType 
             = "text/plain; charset=utf-8")

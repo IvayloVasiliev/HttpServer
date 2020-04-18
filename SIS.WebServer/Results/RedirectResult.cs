@@ -2,9 +2,8 @@
 {
     using HTTP.Enums;
     using HTTP.Headers;
-    using HTTP.Responses;
 
-    public class RedirectResult : HttpResponse
+    public class RedirectResult : ActionResult
     {
         public RedirectResult(string location) :
             base(HttpResponseStatusCode.SeeOther)

@@ -3,12 +3,13 @@
     using SIS.HTTP.Enums;
     using SIS.HTTP.Responses;
     using SIS.MvcFramework.Attributes;
+    using SIS.MvcFramework.Attributes.Action;
+    using SIS.MvcFramework.Attributes.Security;
+    using SIS.MvcFramework.Results;
     using SIS.MvcFramework.Routing;
     using System;
     using System.Linq;
     using System.Reflection;
-    using System.Runtime.CompilerServices;
-    using System.Security.Cryptography.X509Certificates;
 
     public static class WebHost
     {
@@ -34,7 +35,8 @@
             foreach (var contoller in controllers)
             {
                 var actions = contoller.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                    .Where(x => !x.IsSpecialName && x.DeclaringType == contoller);
+                    .Where(x => !x.IsSpecialName && x.DeclaringType == contoller)
+                    .Where(x => x.GetCustomAttributes().All(a => a.GetType() != typeof(NonActionAttribute)));
 
                 foreach (var action in actions)
                 {                  
@@ -64,7 +66,19 @@
                     {
                         //request => new UsersController().Login(request))
                         var controllerInstance = Activator.CreateInstance(contoller);
-                        var responce = action.Invoke(controllerInstance, new[] { request}) as HttpResponse;
+                        ((Controller)controllerInstance).Request = request;
+
+                        //Security Authorization
+                        var controllerPrincipal = ((Controller)controllerInstance).User;
+                        var authorizeAttribute   = action.GetCustomAttributes()
+                            .LastOrDefault(a=> a.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
+
+                        if (authorizeAttribute != null && !authorizeAttribute.IsAuthority(controllerPrincipal))
+                        {
+                            return new HttpResponse(HttpResponseStatusCode.Forbidden);
+                        }
+
+                        var responce = action.Invoke(controllerInstance, new object[0]) as ActionResult;
                         return responce;
                     });
 
