@@ -61,10 +61,13 @@
             string viewName = view;
 
             string viewContent = System.IO.File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
-
             viewContent = this.ParseTemplate(viewContent);
 
-            HtmlResult htmlResult = new HtmlResult(viewContent);
+            string layoutContent = System.IO.File.ReadAllText("Views/_Layout.html");
+            layoutContent = this.ParseTemplate(layoutContent);
+            layoutContent = layoutContent.Replace("@RenderBody()", viewContent);
+
+            HtmlResult htmlResult = new HtmlResult(layoutContent);
 
             return htmlResult;
         }
