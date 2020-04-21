@@ -17,7 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{CFC42AC0-0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IRunes", "IRunes", "{97253703-496E-4916-B61C-220186BFFA0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRunes.Services", "IRunes.Services\IRunes.Services.csproj", "{5B59F0B0-4AAA-4ADB-B51C-97D6546E2BED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Services", "IRunes.Services\IRunes.Services.csproj", "{5B59F0B0-4AAA-4ADB-B51C-97D6546E2BED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIS.MvcFramework.Tests", "SIS.MvcFramework.Tests\SIS.MvcFramework.Tests.csproj", "{96A8EF40-6B39-47DD-A055-7BDC9CA273C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{5B59F0B0-4AAA-4ADB-B51C-97D6546E2BED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B59F0B0-4AAA-4ADB-B51C-97D6546E2BED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B59F0B0-4AAA-4ADB-B51C-97D6546E2BED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96A8EF40-6B39-47DD-A055-7BDC9CA273C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96A8EF40-6B39-47DD-A055-7BDC9CA273C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96A8EF40-6B39-47DD-A055-7BDC9CA273C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96A8EF40-6B39-47DD-A055-7BDC9CA273C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
