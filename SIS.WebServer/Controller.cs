@@ -1,22 +1,26 @@
-﻿namespace SIS.MvcFramework
-{
-    using SIS.HTTP.Requests;
-    using SIS.MvcFramework.Extensions;
-    using SIS.MvcFramework.Identity;
-    using SIS.MvcFramework.Results;
-    using System.Collections.Generic;
-    using System.Runtime.CompilerServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using SIS.HTTP.Requests;
+using SIS.MvcFramework.Extensions;
+using SIS.MvcFramework.Identity;
+using SIS.MvcFramework.Results;
+using SIS.MvcFramework.ViewEngine;
 
+namespace SIS.MvcFramework
+{
     public abstract class Controller
     {
-        protected Dictionary<string, object> ViewData;
+        private IViewEngine viewEngine = new SisViewEngine();
 
         protected Controller()
         {
-            this.ViewData = new Dictionary<string, object>();
+            ViewData = new Dictionary<string, object>();
         }
 
+        protected Dictionary<string, object> ViewData;
 
+        // TODO: Refactor this
         public Principal User =>
             this.Request.Session.ContainsParameter("principal")
             ? (Principal)this.Request.Session.GetParameter("principal")
@@ -24,30 +28,19 @@
 
         public IHttpRequest Request { get; set; }
 
-        private string ParseTemplate(string viewContent)
-        {
-            foreach (var param in this.ViewData)
-            {
-                viewContent = viewContent.Replace($"@Model.{param.Key}", param.Value.ToString());
-            }
-     
-            return viewContent;
-        }
-
         protected bool IsLoggedIn()
         {
             return this.Request.Session.ContainsParameter("principal");
         }
 
-        protected void SignIn(string id, string userName, string email)
+        protected void SignIn(string id, string username, string email)
         {
             this.Request.Session.AddParameter("principal", new Principal
-            { 
+            {
                 Id = id,
-                Username = userName,
+                Username = username,
                 Email = email
             });
-
         }
 
         protected void SignOut()
@@ -57,24 +50,31 @@
 
         protected ActionResult View([CallerMemberName] string view = null)
         {
+            return this.View<object>(null, view);
+        }
+
+        protected ActionResult View<T>(T model = null, [CallerMemberName] string view = null)
+            where T : class
+        {
+           
+
             string controllerName = this.GetType().Name.Replace("Controller", string.Empty);
             string viewName = view;
 
             string viewContent = System.IO.File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
-            viewContent = this.ParseTemplate(viewContent);
+            viewContent = this.viewEngine.GetHtml(viewContent, model);
 
             string layoutContent = System.IO.File.ReadAllText("Views/_Layout.html");
-            layoutContent = this.ParseTemplate(layoutContent);
+            layoutContent = this.viewEngine.GetHtml(layoutContent, model);
             layoutContent = layoutContent.Replace("@RenderBody()", viewContent);
 
-            HtmlResult htmlResult = new HtmlResult(layoutContent);
-
+            var htmlResult = new HtmlResult(layoutContent);
             return htmlResult;
         }
 
         protected ActionResult Redirect(string url)
         {
-            return new RedirectResult(url);        
+            return new RedirectResult(url);
         }
 
         protected ActionResult Xml(object obj)
@@ -92,11 +92,9 @@
             return new FileResult(fileContent);
         }
 
-        protected ActionResult NotFound(string message ="")
+        protected ActionResult NotFound(string message = "")
         {
             return new NotFoundResult(message);
         }
-
-       
     }
 }

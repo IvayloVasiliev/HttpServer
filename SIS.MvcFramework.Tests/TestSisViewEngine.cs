@@ -1,4 +1,3 @@
-using SIS.MvcFramework.Tests;
 using SIS.MvcFramework.ViewEngine;
 using System.Collections.Generic;
 using System.IO;
