@@ -10,7 +10,7 @@
     using Requests;
     using Exceptions;
     using Cookies;
-    using SIS.HTTP.Sessions.Contracts;
+    using SIS.HTTP.Sessions;
 
     public class HttpRequest : IHttpRequest
     {

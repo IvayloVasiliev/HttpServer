@@ -5,7 +5,7 @@
     using Enums;
     using Headers;
     using Cookies;
-    using Sessions.Contracts;
+    using Sessions;
 
     public interface IHttpRequest
     {

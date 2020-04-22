@@ -7,6 +7,7 @@
     using SIS.MvcFramework.Attributes.Security;
     using SIS.MvcFramework.Results;
     using SIS.MvcFramework.Routing;
+    using SIS.MvcFramework.Sessions;
     using System;
     using System.Linq;
     using System.Reflection;
@@ -16,6 +17,7 @@
         public static void Start(IMvcApplication application)
         {
             IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
+            IHttpSessionStorage httpSessionStorage = new HttpSessionStorage();
 
             AutoRegisterRouts(application, serverRoutingTable);
 
@@ -23,7 +25,7 @@
 
             application.Configure(serverRoutingTable);
 
-            Server server = new Server(8000, serverRoutingTable);
+            Server server = new Server(8000, serverRoutingTable, httpSessionStorage);
             server.Run();
         }
 

@@ -1,11 +1,11 @@
 ﻿namespace SIS.MvcFramework
 {
+    using Routing;
+    using SIS.Common;
+    using SIS.MvcFramework.Sessions;
     using System;
     using System.Net;
     using System.Net.Sockets;
-
-    using Routing;
-    using HTTP.Common;
     using System.Threading.Tasks;
 
     public class Server
@@ -16,23 +16,27 @@
 
         private readonly TcpListener tcpListener;
 
-        private IServerRoutingTable serverRoutingTable;
+        private readonly IServerRoutingTable serverRoutingTable;
+
+        private readonly IHttpSessionStorage httpSessionStorage;
 
         private bool isRunning;
 
-        public Server(int port, IServerRoutingTable serverRoutingTable)
+        public Server(int port, IServerRoutingTable serverRoutingTable, IHttpSessionStorage httpSessionStorage)
         {
-            CoreValidator.ThrowIfNull(serverRoutingTable, nameof(serverRoutingTable));
+            serverRoutingTable.ThrowIfNull(nameof(serverRoutingTable));
+            httpSessionStorage.ThrowIfNull(nameof(httpSessionStorage));
 
             this.port = port;
             this.serverRoutingTable = serverRoutingTable;
+            this.httpSessionStorage = httpSessionStorage;
 
             this.tcpListener = new TcpListener(IPAddress.Parse(LocalHostIpAddres), port);
         }
 
         private async Task ListenAsync(Socket client)
         {
-            var connectionHandler = new ConnectionHandler(client, this.serverRoutingTable);
+            var connectionHandler = new ConnectionHandler(client, this.serverRoutingTable, this.httpSessionStorage);
             await connectionHandler.ProcessRequestAsync();
         }
 

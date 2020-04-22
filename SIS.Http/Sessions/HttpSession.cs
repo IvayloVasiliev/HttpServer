@@ -3,7 +3,6 @@
     using System.Collections.Generic;
 
     using Common;
-    using Sessions.Contracts;
 
     public class HttpSession : IHttpSession
     { 
@@ -16,6 +15,7 @@
         }
 
         public string Id { get; }
+        public bool IsNew { get; set; }
 
         public bool ContainsParameter(string name)
         {
