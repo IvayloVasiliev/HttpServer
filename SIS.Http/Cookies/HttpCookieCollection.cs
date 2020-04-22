@@ -1,11 +1,10 @@
 ﻿namespace SIS.HTTP.Cookies
 {
+    using Common;
+    using SIS.Common;
     using System.Collections;
     using System.Collections.Generic;
     using System.Text;
-    using Common;
-    using Cookies;
-
 
     public class HttpCookieCollection : IHttpCookieCollections
     {
@@ -18,7 +17,7 @@
 
         public void AddCookie(HttpCookie httpCookie)
         {
-            CoreValidator.ThrowIfNull(httpCookie, nameof(httpCookie));
+            httpCookie.ThrowIfNull(nameof(httpCookie));
 
             if (!this.ContainCookie(httpCookie.Key))
             {
@@ -28,14 +27,14 @@
 
         public bool ContainCookie(string key)
         {
-            CoreValidator.ThrowIfNullOrEmpty(key, nameof(key));
+            key.ThrowIfNullOrEmpty(nameof(key));
 
-           return  this.httpCookies.ContainsKey(key);
+            return  this.httpCookies.ContainsKey(key);
         }
 
         public HttpCookie GetCookie(string key)
         {
-            CoreValidator.ThrowIfNullOrEmpty(key, nameof(key));
+            key.ThrowIfNullOrEmpty(nameof(key));
 
             return this.httpCookies[key];
         }  

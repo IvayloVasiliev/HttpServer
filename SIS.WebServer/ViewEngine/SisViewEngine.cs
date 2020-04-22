@@ -26,7 +26,7 @@ namespace AppViewCodeNamespace
     {{
         public string GetHtml(object model)
         {{
-            var Model = model as {model.GetType().FullName};
+            var Model = {(model == null ? "new {}" :"model as" + model.GetType().FullName)};
 	        var html = new StringBuilder();
             {csharpHtmlCode}
             
@@ -34,14 +34,13 @@ namespace AppViewCodeNamespace
         }}
     }}
 }}";
-            var view = CompileAndInstance(code, model.GetType().Assembly);
+            var view = CompileAndInstance(code, model?.GetType().Assembly);
             var htmlResult = view?.GetHtml(model);
             return htmlResult;
         }
 
         private string GetCSharpCode(string viewContent)
         {
-            // TODO: { var a = "Niki"; }
             var lines = viewContent.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
             var cSharpCode = new StringBuilder();
             var supportedOpperators = new[] { "for", "if", "else" };
@@ -67,6 +66,13 @@ namespace AppViewCodeNamespace
                         var csharpLine = $"html.AppendLine(@\"{line.Replace("\"", "\"\"")}\");";
                         cSharpCode.AppendLine(csharpLine);
                     }
+
+                    else if (line.Contains("@RenderBody()"))
+                    {
+                        var csharpLine = $"html.AppendLine(@\"{line}\");";
+                        cSharpCode.AppendLine(csharpLine);
+                    }
+
                     else
                     {
                         var csharpStringToAppend = "html.AppendLine(@\"";
@@ -100,6 +106,9 @@ namespace AppViewCodeNamespace
 
         private IView CompileAndInstance(string code, Assembly modelAssembly)
         {
+            modelAssembly = modelAssembly == null ? Assembly.GetEntryAssembly() : modelAssembly;
+            //modelAssembly = modelAssembly ?? Assembly.GetEntryAssembly();  
+
             var compilation = CSharpCompilation.Create("AppViewAssembly")
                 .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
                 .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))

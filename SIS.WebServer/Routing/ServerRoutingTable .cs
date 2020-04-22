@@ -1,13 +1,11 @@
 ﻿namespace SIS.MvcFramework.Routing
 {
-    using System;
-    using System.Collections.Generic;
-
-    using HTTP.Common;
     using HTTP.Enums;
     using HTTP.Requests;
     using HTTP.Responses;
-    using Routing;
+    using SIS.Common;
+    using System;
+    using System.Collections.Generic;
 
     public class ServerRoutingTable : IServerRoutingTable
     {
@@ -26,25 +24,25 @@
 
         public void Add(HttpRequestMethod method, string path, Func<IHttpRequest, IHttpResponse> func)
         {
-            CoreValidator.ThrowIfNull(method, nameof(method));
-            CoreValidator.ThrowIfNullOrEmpty(path, nameof(path));
-            CoreValidator.ThrowIfNull(func, nameof(func));
+            method.ThrowIfNull(nameof(method));
+            func.ThrowIfNull(nameof(func));
+            path.ThrowIfNullOrEmpty(nameof(path));
 
             this.routingTable[method].Add(path, func);
         }
 
         public bool Contains(HttpRequestMethod method, string path)
         {
-            CoreValidator.ThrowIfNull(method, nameof(method));
-            CoreValidator.ThrowIfNullOrEmpty(path, nameof(path));
+            method.ThrowIfNull(nameof(method));
+            path.ThrowIfNullOrEmpty(nameof(path));
 
             return this.routingTable.ContainsKey(method) && this.routingTable[method].ContainsKey(path);
         }
 
         public Func<IHttpRequest, IHttpResponse> Get(HttpRequestMethod method, string path)
         {
-            CoreValidator.ThrowIfNull(method, nameof(method));
-            CoreValidator.ThrowIfNullOrEmpty(path, nameof(path));
+            method.ThrowIfNull(nameof(method));
+            path.ThrowIfNullOrEmpty(nameof(path));
 
             return this.routingTable[method][path];
         }

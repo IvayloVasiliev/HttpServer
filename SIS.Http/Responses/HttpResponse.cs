@@ -4,6 +4,7 @@
     using Enums;
     using Extensions;
     using Headers;
+    using SIS.Common;
     using SIS.HTTP.Cookies;
     using System.Text;
 
@@ -18,7 +19,7 @@
 
         public HttpResponse(HttpResponseStatusCode statusCode) : this()
         {
-            CoreValidator.ThrowIfNull(statusCode, nameof(statusCode));
+            statusCode.ThrowIfNull(nameof(statusCode));
             this.StatusCode = statusCode;
         }
 

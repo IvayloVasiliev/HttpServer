@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using Common;
+    using SIS.Common;
 
     public class HttpSession : IHttpSession
     { 
@@ -19,22 +19,22 @@
 
         public bool ContainsParameter(string name)
         {
-            CoreValidator.ThrowIfNullOrEmpty(name, nameof(name));
+            name.ThrowIfNullOrEmpty(nameof(name));
 
             return this.sessionParameters.ContainsKey(name);
         }
 
         public object GetParameter(string name)
         {
-            CoreValidator.ThrowIfNullOrEmpty(name, nameof(name));
+            name.ThrowIfNullOrEmpty(nameof(name));
 
             return this.sessionParameters[name];
         }
 
         public void AddParameter(string name, object parameter)
         {
-            CoreValidator.ThrowIfNullOrEmpty(name, nameof(name));
-            CoreValidator.ThrowIfNull(parameter, nameof(parameter));
+            parameter.ThrowIfNull(nameof(parameter));
+            name.ThrowIfNullOrEmpty(nameof(name));
 
             this.sessionParameters[name] = parameter;               
         }

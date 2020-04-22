@@ -11,12 +11,13 @@
     using Exceptions;
     using Cookies;
     using SIS.HTTP.Sessions;
+    using SIS.Common;
 
     public class HttpRequest : IHttpRequest
     {
         public HttpRequest(string requestString)
         {
-            CoreValidator.ThrowIfNullOrEmpty(requestString, nameof(requestString));
+            requestString.ThrowIfNullOrEmpty(nameof(requestString));
 
             this.FormData = new Dictionary<string, object>();
             this.QueryData = new Dictionary<string, object>();
@@ -99,8 +100,7 @@
 
         private bool IsValidRequestQueryString(string queryString, string[] queryParameters)
         {
-            CoreValidator.ThrowIfNullOrEmpty(queryString, nameof(queryString));
-
+            queryString.ThrowIfNullOrEmpty(nameof(queryString));
             return true; //todo
         }
 
@@ -125,16 +125,6 @@
 
         private void ParseRequestFormDataParameters(string requestBody)
         {
-            //if (!string.IsNullOrEmpty(requestBody))
-            //{
-            //    requestBody
-            //    .Split('&')
-            //    .Select(plainQueryParameter => plainQueryParameter.Split('='))
-            //    .ToList()
-            //    .ForEach(queryParameterKVP => this.FormData.Add(queryParameterKVP[0], queryParameterKVP[1]));
-            //}
-
-            //TODO : Parse multiple parameters by name
 
             if (string.IsNullOrEmpty(requestBody) == false)
             {

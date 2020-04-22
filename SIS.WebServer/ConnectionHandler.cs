@@ -5,7 +5,6 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    using HTTP.Common;
     using HTTP.Enums;
     using HTTP.Exceptions;
     using HTTP.Requests;
@@ -17,6 +16,7 @@
     using System.Reflection;
     using System.IO;
     using SIS.HTTP.Sessions;
+    using SIS.Common;
 
     public class ConnectionHandler
     {
@@ -28,9 +28,10 @@
 
         public ConnectionHandler(Socket client, IServerRoutingTable serverRoutingTable, IHttpSessionStorage httpSessionStorage)
         {
-            CoreValidator.ThrowIfNull(client, nameof(client));
-            CoreValidator.ThrowIfNull(serverRoutingTable, nameof(serverRoutingTable));
-            CoreValidator.ThrowIfNull(httpSessionStorage, nameof(httpSessionStorage));
+            client.ThrowIfNull(nameof(client));
+            serverRoutingTable.ThrowIfNull(nameof(serverRoutingTable));
+            httpSessionStorage.ThrowIfNull(nameof(httpSessionStorage));
+
 
             this.client = client;
             this.serverRoutingTable = serverRoutingTable;
