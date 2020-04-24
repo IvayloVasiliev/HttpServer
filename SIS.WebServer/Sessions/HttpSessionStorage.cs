@@ -14,7 +14,7 @@
         {
             this.httpSessions = new ConcurrentDictionary<string, IHttpSession>();
         }
-
+         
         public IHttpSession GetSession(string id)
         {
             return httpSessions.GetOrAdd(id, _=> new HttpSession(id));

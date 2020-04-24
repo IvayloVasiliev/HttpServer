@@ -1,13 +1,14 @@
 ﻿namespace IRunes.App.Controlers
 {
-    using IRunes.App.Extensions;
     using IRunes.App.ViewModels;
     using IRunes.Models;
     using IRunes.Services;
     using SIS.MvcFramework;
     using SIS.MvcFramework.Attributes;
     using SIS.MvcFramework.Attributes.Security;
+    using SIS.MvcFramework.Mapping;
     using SIS.MvcFramework.Results;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -26,8 +27,9 @@
         public ActionResult Create()
         {
             string albumId = this.Request.QueryData["albumId"].ToString();
-            this.ViewData["AlbumId"] = albumId;
-            return this.View();
+          
+
+            return this.View(new TrackCreateViewModel { AlbumId = albumId});
         }
 
         [Authorize]
@@ -69,9 +71,10 @@
                 return this.Redirect($"/Albums/Details?id={albumId}");
             }
 
-            this.ViewData["AlbumId"] = albumId;
-            this.ViewData["Track"] = trackFromDb.ToHtmlDetails(albumId);
-            return this.View(new AlbumDetailsViewModel { AlbumId = albumId });
+            TrackDetailsViewModel trackDetailsViewModel = ModelMapper.ProjectTo<TrackDetailsViewModel>(trackFromDb);
+            trackDetailsViewModel.AlbumId = albumId;
+
+            return this.View(trackDetailsViewModel);
         }
 
     }

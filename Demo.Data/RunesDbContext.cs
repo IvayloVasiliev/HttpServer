@@ -24,6 +24,9 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<User>()
+            //    .HasKey(user => user.Id);
+
             modelBuilder.Entity<User>()
                 .Property(user => user.Id)
                 .ValueGeneratedOnAdd();

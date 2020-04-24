@@ -20,13 +20,12 @@
             this.userService = new UserService();
         }
 
-
         [NonAction]
         private string HashPassword(string password)
         {
-            using (SHA256 sha256hash = SHA256.Create())
+            using (SHA256 sha256Hash = SHA256.Create())
             {
-                return Encoding.UTF8.GetString(sha256hash.ComputeHash(Encoding.UTF8.GetBytes(password)));
+                return Encoding.UTF8.GetString(sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password)));
             }
         }
 
@@ -74,17 +73,19 @@
             User user = new User
             {
                 Username = username,
-                Password = HashPassword(password),
+                Password = this.HashPassword(password),
                 Email = email
             };
 
             this.userService.CreateUser(user);
+
             return this.Redirect("/Users/Login");
         }
 
         public ActionResult Logout()
         {
             this.SignOut();
+
             return this.Redirect("/");
         }
     }
