@@ -1,6 +1,7 @@
 ﻿namespace SIS.MvcFramework
 {
     using SIS.HTTP.Enums;
+    using SIS.HTTP.Requests;
     using SIS.HTTP.Responses;
     using SIS.MvcFramework.Attributes;
     using SIS.MvcFramework.Attributes.Action;
@@ -10,6 +11,7 @@
     using SIS.MvcFramework.Results;
     using SIS.MvcFramework.Routing;
     using SIS.MvcFramework.Sessions;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
 
@@ -26,19 +28,19 @@
             application.ConfigureServices(serviceProvider);
 
             AutoRegisterRouts(application, serverRoutingTable, serviceProvider);
-            application.Configure(serverRoutingTable);  
+            application.Configure(serverRoutingTable);
             Server server = new Server(8000, serverRoutingTable, httpSessionStorage);
             server.Run();
         }
 
         private static void AutoRegisterRouts(
-            IMvcApplication application, 
+            IMvcApplication application,
             IServerRoutingTable serverRoutingTable,
             IServiceProvider serviceProvider)
         {
-           var controllers = application.GetType().Assembly.GetTypes()
-                .Where(type => type.IsClass && !type.IsAbstract 
-                && typeof(Controller).IsAssignableFrom(type));
+            var controllers = application.GetType().Assembly.GetTypes()
+                 .Where(type => type.IsClass && !type.IsAbstract
+                 && typeof(Controller).IsAssignableFrom(type));
 
             foreach (var contollerType in controllers)
             {
@@ -47,7 +49,7 @@
                     .Where(x => x.GetCustomAttributes().All(a => a.GetType() != typeof(NonActionAttribute)));
 
                 foreach (var action in actions)
-                {                  
+                {
                     var path = $"/{contollerType.Name.Replace("Controller", string.Empty)}/{action.Name}";
                     var attribute = action.GetCustomAttributes()
                         .Where(s => s.GetType().IsSubclassOf(typeof(BaseHttpAttribute)))
@@ -57,7 +59,7 @@
 
                     if (attribute != null)
                     {
-                        httpMethod = attribute.Method; 
+                        httpMethod = attribute.Method;
                     }
 
                     if (attribute?.Url != null)
@@ -70,30 +72,58 @@
                         path = $"/{contollerType.Name.Replace("Controller", string.Empty)}/{attribute.ActionName}";
                     }
 
-                    serverRoutingTable.Add(httpMethod, path, request =>
-                    {
-                        //request => new UsersController().Login(request))
-                        var controllerInstance = serviceProvider.CreateInstance(contollerType) as Controller;
-                        controllerInstance.Request = request;
-
-                        //Security Authorization
-                        var controllerPrincipal = controllerInstance.User;
-                        var authorizeAttribute   = action.GetCustomAttributes()
-                            .LastOrDefault(a=> a.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
-
-                        if (authorizeAttribute != null && !authorizeAttribute.IsAuthority(controllerPrincipal))
-                        {
-                            return new HttpResponse(HttpResponseStatusCode.Forbidden);
-                        }
-
-                        var responce = action.Invoke(controllerInstance, new object[0]) as ActionResult;
-                        return responce;
-                    });
+                    serverRoutingTable.Add(httpMethod, path, (request) => ProcessRequest(serviceProvider, contollerType, action, request));
 
                     System.Console.WriteLine(httpMethod + " " + path);
                 }
             }
 
+        }
+
+        private static IHttpResponse ProcessRequest(IServiceProvider serviceProvider,
+            System.Type contollerType,
+            MethodInfo action,
+            IHttpRequest request)
+        {
+            //request => new UsersController().Login(request))
+            var controllerInstance = serviceProvider.CreateInstance(contollerType) as Controller;
+            controllerInstance.Request = request;
+
+            //Security Authorization
+            var controllerPrincipal = controllerInstance.User;
+            var authorizeAttribute = action.GetCustomAttributes()
+                .LastOrDefault(a => a.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
+
+            if (authorizeAttribute != null && !authorizeAttribute.IsAuthority(controllerPrincipal))
+            {
+                return new HttpResponse(HttpResponseStatusCode.Forbidden);
+            }
+
+            var parameters = action.GetParameters();
+            var parameterValues = new List<object>();
+
+            foreach (var parameter in parameters)
+            {
+                var parameterName = parameter.Name.ToLower();
+                //ISet<string> httpDataValue = null;
+
+                //if (request.QueryData.Any(x=> x.Key.ToLower() == parameterName))
+                //{
+                //    parameterValue = request.QueryData.FirstOrDefault(x => x.Key.ToLower() == parameterName);
+                //}
+
+                //if (request.FormData.Any(x => x.Key.ToLower() == parameterName))
+                //{
+                //    parameterValue = request.FormData.FirstOrDefault(x => x.Key.ToLower() == parameterName);
+                //}
+
+
+
+
+            }
+
+            var responce = action.Invoke(controllerInstance, parameterValues.ToArray()) as ActionResult;
+            return responce;
         }
     }
 }

@@ -17,16 +17,16 @@
         private readonly ITrackService trackService;
         private readonly IAlbumService albumService;
 
-        public TracksController()
+        public TracksController(ITrackService trackService, IAlbumService albumService)
         {
-            this.trackService = new TrackService();
-            this.albumService = new AlbumService();
+            this.trackService = trackService;
+            this.albumService = albumService;
         }
 
         [Authorize]
         public ActionResult Create()
         {
-            string albumId = this.Request.QueryData["albumId"].ToString();
+            string albumId = this.Request.QueryData["albumId"].FirstOrDefault();
           
 
             return this.View(new TrackCreateViewModel { AlbumId = albumId});
@@ -38,9 +38,9 @@
         {
             string albumId = this.Request.QueryData["albumId"].ToString();
 
-            string name = ((ISet<string>)this.Request.FormData["name"]).FirstOrDefault();
-            string link = ((ISet<string>)this.Request.FormData["link"]).FirstOrDefault();
-            string price = ((ISet<string>)this.Request.FormData["price"]).FirstOrDefault();
+            string name = this.Request.FormData["name"].FirstOrDefault();
+            string link =this.Request.FormData["link"].FirstOrDefault();
+            string price = this.Request.FormData["price"].FirstOrDefault();
 
             Track trackFromDb = new Track
             {
@@ -61,8 +61,8 @@
         [Authorize]
         public ActionResult Details()
         {
-            string trackId = this.Request.QueryData["trackId"].ToString();
-            string albumId = this.Request.QueryData["albumId"].ToString();
+            string trackId = this.Request.QueryData["trackId"].FirstOrDefault();
+            string albumId = this.Request.QueryData["albumId"].FirstOrDefault();
 
             Track trackFromDb = this.trackService.GetTrackById(trackId);
 

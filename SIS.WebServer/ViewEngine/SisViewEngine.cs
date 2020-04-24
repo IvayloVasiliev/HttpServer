@@ -78,12 +78,7 @@ namespace AppViewCodeNamespace
                 else
                 {
                     // HTML
-                    if (!line.Contains("@"))
-                    {
-                        var csharpLine = $"html.AppendLine(@\"{line.Replace("\"", "\"\"")}\");";
-                        csharpCode.AppendLine(csharpLine);
-                    }
-                    else if (line.Contains("@RenderBody()"))
+                    if (line.Contains("@RenderBody()"))
                     {
                         var csharpLine = $"html.AppendLine(@\"{line}\");";
                         csharpCode.AppendLine(csharpLine);
