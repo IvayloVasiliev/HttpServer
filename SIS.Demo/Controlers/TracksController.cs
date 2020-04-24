@@ -1,6 +1,7 @@
 ﻿namespace IRunes.App.Controlers
 {
     using IRunes.App.ViewModels;
+    using IRunes.App.ViewModels.Tracks;
     using IRunes.Models;
     using IRunes.Services;
     using SIS.MvcFramework;
@@ -8,9 +9,6 @@
     using SIS.MvcFramework.Attributes.Security;
     using SIS.MvcFramework.Mapping;
     using SIS.MvcFramework.Results;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class TracksController : Controller
     {
@@ -24,46 +22,34 @@
         }
 
         [Authorize]
-        public ActionResult Create()
+        public ActionResult Create(string albumId)
         {
-            string albumId = this.Request.QueryData["albumId"].FirstOrDefault();
-          
-
             return this.View(new TrackCreateViewModel { AlbumId = albumId});
         }
 
         [Authorize]
-        [HttpPost(ActionName = "Create")]
-        public ActionResult CreateConfirm()
+        [HttpPost]
+        public ActionResult Create(CreateInputModel model)
         {
-            string albumId = this.Request.QueryData["albumId"].ToString();
-
-            string name = this.Request.FormData["name"].FirstOrDefault();
-            string link =this.Request.FormData["link"].FirstOrDefault();
-            string price = this.Request.FormData["price"].FirstOrDefault();
-
             Track trackFromDb = new Track
             {
-                Name = name,
-                Link = link,
-                Price = decimal.Parse(price)
-            };
+                Name = model.Name,
+                Link = model.Link,
+                Price = model.Price
+            }; 
 
-            if (!this.albumService.AddTrackToAlbum(albumId, trackFromDb))
+            if (!this.albumService.AddTrackToAlbum(model.AlbumId, trackFromDb))
             {
                 return this.Redirect("/Albums/All");
             }
 
-            return this.Redirect($"/Albums/Details?id={albumId}");
+            return this.Redirect($"/Albums/Details?id={model.AlbumId}");
         }
 
 
         [Authorize]
-        public ActionResult Details()
+        public ActionResult Details(string trackId, string albumId)
         {
-            string trackId = this.Request.QueryData["trackId"].FirstOrDefault();
-            string albumId = this.Request.QueryData["albumId"].FirstOrDefault();
-
             Track trackFromDb = this.trackService.GetTrackById(trackId);
 
             if (trackFromDb == null)

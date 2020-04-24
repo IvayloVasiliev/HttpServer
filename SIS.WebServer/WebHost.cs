@@ -88,7 +88,7 @@
             //request => new UsersController().Login(request))
             var controllerInstance = serviceProvider.CreateInstance(contollerType) as Controller;
             controllerInstance.Request = request;
-
+             
             //Security Authorization
             var controllerPrincipal = controllerInstance.User;
             var authorizeAttribute = action.GetCustomAttributes()
@@ -104,26 +104,59 @@
 
             foreach (var parameter in parameters)
             {
-                var parameterName = parameter.Name.ToLower();
-                //ISet<string> httpDataValue = null;
+                ISet<string> httpDataValue = TryGetHttpParameter(request, parameter.Name);
 
-                //if (request.QueryData.Any(x=> x.Key.ToLower() == parameterName))
+                //if (parameter.ParameterType.IsSubclassOf(typeof(IEnumerable<>)))
                 //{
-                //    parameterValue = request.QueryData.FirstOrDefault(x => x.Key.ToLower() == parameterName);
+                //   var collection = httpDataValue.Select(x=> System.Convert
+                //    .ChangeType(x, parameter.ParameterType.GenericTypeArguments.First()));
+                //    parameterValues.Add(collection);
                 //}
 
-                //if (request.FormData.Any(x => x.Key.ToLower() == parameterName))
-                //{
-                //    parameterValue = request.FormData.FirstOrDefault(x => x.Key.ToLower() == parameterName);
-                //}
+                try
+                {
 
-
-
+                    string httpStringValue = httpDataValue.FirstOrDefault();
+                    var parameterValue = System.Convert.ChangeType(httpStringValue, parameter.ParameterType);
+                    parameterValues.Add(parameterValue);
+                }
+                catch
+                {
+                    var parameterValue = System.Activator.CreateInstance(parameter.ParameterType);
+                    var properties = parameter.ParameterType.GetProperties();
+                    foreach (var property in properties)
+                    {
+                        ISet<string> propertyHttpDataValue = TryGetHttpParameter(request, parameter.Name);
+                        var firstValue = propertyHttpDataValue.FirstOrDefault();
+                        var propertyValue = System.Convert.ChangeType(firstValue, property.PropertyType);
+                        property.SetMethod.Invoke(parameterValue, new object[] { propertyValue });
+                    }
+                    parameterValues.Add(parameterValue);
+                }
 
             }
 
             var responce = action.Invoke(controllerInstance, parameterValues.ToArray()) as ActionResult;
             return responce;
+        }
+
+        private static ISet<string> TryGetHttpParameter(IHttpRequest request, string parameterName)
+        {
+            parameterName = parameterName.ToLower();
+            ISet<string> httpDataValue = null;
+
+            if (request.QueryData.Any(x => x.Key.ToLower() == parameterName))
+            {
+                httpDataValue = request.QueryData.FirstOrDefault(
+                    x => x.Key.ToLower() == parameterName).Value;
+            }
+            else if (request.FormData.Any(x => x.Key.ToLower() == parameterName))
+            {
+                httpDataValue = request.FormData.FirstOrDefault(
+                    x => x.Key.ToLower() == parameterName).Value;
+            }
+
+            return httpDataValue;
         }
     }
 }

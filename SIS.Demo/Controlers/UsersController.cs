@@ -6,8 +6,6 @@
     using SIS.MvcFramework.Attributes;
     using SIS.MvcFramework.Attributes.Action;
     using SIS.MvcFramework.Results;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
 
@@ -34,12 +32,9 @@
             return this.View();
         }
 
-        [HttpPost(ActionName = "Login")]
-        public ActionResult LoginConfirm()
+        [HttpPost]
+        public ActionResult Login(string username, string password)
         {
-            string username = ((ISet<string>)this.Request.FormData["username"]).FirstOrDefault();
-            string password = ((ISet<string>)this.Request.FormData["password"]).FirstOrDefault();
-
             User userFromDb = this.userService.GetUserByUsernameAndPassword(username, this.HashPassword(password));
 
             if (userFromDb == null)
@@ -57,14 +52,9 @@
             return this.View();
         }
 
-        [HttpPost(ActionName = "Register")]
-        public ActionResult RegisterConfirm()
+        [HttpPost]
+        public ActionResult Register(string username, string password, string confirmPassword, string email)
         {
-            string username = ((ISet<string>)this.Request.FormData["username"]).FirstOrDefault();
-            string password = ((ISet<string>)this.Request.FormData["password"]).FirstOrDefault();
-            string confirmPassword = ((ISet<string>)this.Request.FormData["confirmPassword"]).FirstOrDefault();
-            string email = ((ISet<string>)this.Request.FormData["email"]).FirstOrDefault();
-
             if (password != confirmPassword)
             {
                 return this.Redirect("/Users/Register");
@@ -78,7 +68,6 @@
             };
 
             this.userService.CreateUser(user);
-
             return this.Redirect("/Users/Login");
         }
 

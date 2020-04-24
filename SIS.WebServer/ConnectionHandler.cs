@@ -163,11 +163,11 @@
             }
             catch (BadRequestException e)
             {
-                httpResponce = new TextResult(e.Message, HttpResponseStatusCode.BadRequest);
+                httpResponce = new TextResult(e.ToString(), HttpResponseStatusCode.BadRequest);
             }
             catch (Exception e)
             {
-                httpResponce = new TextResult(e.Message, HttpResponseStatusCode.InternalServerError);
+                httpResponce = new TextResult(e.ToString(), HttpResponseStatusCode.InternalServerError);
             }
 
             this.PrepareResponce(httpResponce);
