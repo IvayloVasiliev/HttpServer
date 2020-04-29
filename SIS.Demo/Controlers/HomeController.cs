@@ -16,6 +16,7 @@
 
         public ActionResult Index()
         {
+            
             if (this.IsLoggedIn())
             {
                 return this.View(new UserHomeViewModel { Username = this.User.Username }, "Home");

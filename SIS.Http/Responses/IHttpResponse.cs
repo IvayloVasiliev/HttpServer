@@ -1,4 +1,4 @@
-﻿ namespace SIS.HTTP.Responses
+﻿namespace SIS.HTTP.Responses
 {
     using Enums;
     using Headers;
@@ -10,7 +10,7 @@
 
         IHttpHeaderCollection Headers { get; }
 
-        IHttpCookieCollections Cookies { get; }
+        IHttpCookieCollection Cookies { get; }
 
         byte[] Content { get; set; }
 

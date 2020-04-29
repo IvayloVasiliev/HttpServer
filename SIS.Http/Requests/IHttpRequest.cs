@@ -17,7 +17,7 @@
 
         Dictionary<string, ISet<string>> QueryData { get; }
 
-        IHttpCookieCollections Cookies { get; }
+        IHttpCookieCollection Cookies { get; }
 
         IHttpHeaderCollection Headers { get; }
 

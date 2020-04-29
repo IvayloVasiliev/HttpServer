@@ -44,7 +44,7 @@
 
             this.SignIn(userFromDb.Id, userFromDb.Username, userFromDb.Email);
 
-            return this.Redirect("/");
+            return Redirect("/");
         }
 
         public ActionResult Register()

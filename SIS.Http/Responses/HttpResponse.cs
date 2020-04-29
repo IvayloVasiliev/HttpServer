@@ -9,7 +9,7 @@
     using System.Text;
 
     public class HttpResponse : IHttpResponse
-    { 
+    {
         public HttpResponse()
         {
             this.Headers = new HttpHeaderCollection();
@@ -27,7 +27,7 @@
 
         public IHttpHeaderCollection Headers { get; }
 
-        public IHttpCookieCollections Cookies { get; }
+        public IHttpCookieCollection Cookies { get; }
 
         public byte[] Content { get; set; }
 

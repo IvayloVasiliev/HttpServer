@@ -6,7 +6,7 @@
     using System.Collections.Generic;
     using System.Text;
 
-    public class HttpCookieCollection : IHttpCookieCollections
+    public class HttpCookieCollection : IHttpCookieCollection
     {
         private Dictionary<string, HttpCookie> httpCookies;
 
@@ -19,25 +19,24 @@
         {
             httpCookie.ThrowIfNull(nameof(httpCookie));
 
-            if (!this.ContainCookie(httpCookie.Key))
-            {
-                this.httpCookies.Add(httpCookie.Key, httpCookie);
-            } 
+            this.httpCookies.Add(httpCookie.Key, httpCookie);
         }
 
-        public bool ContainCookie(string key)
+        public bool ContainsCookie(string key)
         {
             key.ThrowIfNullOrEmpty(nameof(key));
 
-            return  this.httpCookies.ContainsKey(key);
+            return this.httpCookies.ContainsKey(key);
         }
 
         public HttpCookie GetCookie(string key)
         {
             key.ThrowIfNullOrEmpty(nameof(key));
 
+            // TODO: Validation for existing parameter (maybe throw exception)
+
             return this.httpCookies[key];
-        }  
+        }
 
         public bool HasCookies()
         {
@@ -47,7 +46,6 @@
         public IEnumerator<HttpCookie> GetEnumerator()
         {
             return this.httpCookies.Values.GetEnumerator();
-
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -61,7 +59,7 @@
 
             foreach (var cookie in this.httpCookies.Values)
             {
-                sb.AppendLine($"Set-Cookie:{cookie}").Append(GlobalConstants.HttpNewLine);
+                sb.Append($"Set-Cookie: {cookie}").Append(GlobalConstants.HttpNewLine);
             }
 
             return sb.ToString();

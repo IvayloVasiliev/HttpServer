@@ -29,7 +29,7 @@
 
         [Authorize]
         [HttpPost]
-        public ActionResult Create(CreateInputModel model)
+        public IActionResult Create(CreateInputModel model)
         {
             Track trackFromDb = new Track
             {

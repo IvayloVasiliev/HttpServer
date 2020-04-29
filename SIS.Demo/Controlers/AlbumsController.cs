@@ -21,17 +21,19 @@
         }
 
         [Authorize]
-        public ActionResult All()
+        public IActionResult All()
         {
             ICollection<Album> allAlbums = this.albumService.GetAllAlbums();
 
             if (allAlbums.Count != 0)
             {
-                return this.View(allAlbums.Select(album => ModelMapper
-                .ProjectTo<AlbumAllViewModel>(album)).ToList());
+                return this.View(allAlbums.Select(ModelMapper
+                  .ProjectTo<AlbumAllViewModel>).ToList());
+                //return this.View(allAlbums.Select(album => ModelMapper
+                //.ProjectTo<AlbumAllViewModel>(album)).ToList());
             }
 
-            return this.View();
+            return this.View(new List<AlbumAllViewModel>());
         }
 
         [Authorize]
@@ -58,7 +60,7 @@
         }
 
         [Authorize]
-        public ActionResult Details(string id)
+        public IActionResult Details(string id)
         {
             Album albumFromDb = this.albumService.GetAlbumById(id);
 

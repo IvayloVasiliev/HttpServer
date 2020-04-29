@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IRunes.App.ViewModels
+﻿namespace IRunes.App.ViewModels
 {
     public class TrackDetailsViewModel
     {

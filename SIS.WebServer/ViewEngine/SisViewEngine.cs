@@ -62,18 +62,45 @@ namespace AppViewCodeNamespace
             var csharpCode = new StringBuilder();
             var supportedOperators = new[] { "for", "if", "else" };
             var csharpCodeRegex = new Regex(@"[^\s<""\&]+", RegexOptions.Compiled);
+            var csharpCodeDepth = 0;
+
             foreach (var line in lines)
             {
-                if (line.TrimStart().StartsWith("{") || line.TrimStart().StartsWith("}"))
+                string currentLine = line;
+
+                if (currentLine.TrimStart().StartsWith("@{"))
+                {
+                    csharpCodeDepth++;
+                }
+                else if (currentLine.TrimStart().StartsWith("{") || currentLine.TrimStart().StartsWith("}"))
                 {
                     // { / }
-                    csharpCode.AppendLine(line);
+                    if (csharpCodeDepth > 0)
+                    {
+                        if (currentLine.TrimStart().StartsWith("{"))
+                        {
+                            csharpCodeDepth++;
+                        }
+                        else if (currentLine.TrimStart().StartsWith("}"))
+                        {
+                            if ((--csharpCodeDepth) == 0)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    csharpCode.AppendLine(currentLine);
                 }
-                else if (supportedOperators.Any(x => line.TrimStart().StartsWith("@" + x)))
+                else if (csharpCodeDepth > 0)
+                {
+                    csharpCode.AppendLine(currentLine);
+                    continue;
+                }
+                else if (supportedOperators.Any(x => currentLine.TrimStart().StartsWith("@" + x)))
                 {
                     // @C#
-                    var atSignLocation = line.IndexOf("@");
-                    var csharpLine = line.Remove(atSignLocation, 1);
+                    var atSignLocation = currentLine.IndexOf("@");
+                    var csharpLine = currentLine.Remove(atSignLocation, 1);
                     csharpCode.AppendLine(csharpLine);
                 }
                 else
@@ -81,13 +108,13 @@ namespace AppViewCodeNamespace
                     // HTML
                     if (line.Contains("@RenderBody()"))
                     {
-                        var csharpLine = $"html.AppendLine(@\"{line}\");";
+                        var csharpLine = $"html.AppendLine(@\"{currentLine}\");";
                         csharpCode.AppendLine(csharpLine);
                     }
                     else
                     {
                         var csharpStringToAppend = "html.AppendLine(@\"";
-                        var restOfLine = line;
+                        var restOfLine = currentLine;
                         while (restOfLine.Contains("@"))
                         {
                             var atSignLocation = restOfLine.IndexOf("@");

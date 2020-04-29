@@ -104,7 +104,7 @@
 
         private string SetRequestSession(IHttpRequest httpRequest)
         {
-            if (httpRequest.Cookies.ContainCookie(HttpSessionStorage.SessionCookieKey))
+            if (httpRequest.Cookies.ContainsCookie(HttpSessionStorage.SessionCookieKey))
             {
                 var cookie = httpRequest.Cookies.GetCookie(HttpSessionStorage.SessionCookieKey);
                 string sessionId = cookie.Value;
@@ -133,7 +133,8 @@
             if (responceSession.IsNew)
             {
                 responceSession.IsNew = false;
-                httpResponce.AddCookie(new HttpCookie(HttpSessionStorage.SessionCookieKey, responceSession.Id));
+                httpResponce.AddCookie(new HttpCookie(HttpSessionStorage.SessionCookieKey, 
+                                                        responceSession.Id));
             }
         }
 

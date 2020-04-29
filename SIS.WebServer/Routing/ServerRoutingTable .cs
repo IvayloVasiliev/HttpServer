@@ -9,7 +9,8 @@
 
     public class ServerRoutingTable : IServerRoutingTable
     {
-        private Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>> routingTable;
+        private Dictionary<HttpRequestMethod, 
+            Dictionary<string, Func<IHttpRequest, IHttpResponse>>> routingTable;
 
         public ServerRoutingTable()
         {
@@ -36,7 +37,8 @@
             method.ThrowIfNull(nameof(method));
             path.ThrowIfNullOrEmpty(nameof(path));
 
-            return this.routingTable.ContainsKey(method) && this.routingTable[method].ContainsKey(path);
+            return this.routingTable.ContainsKey(method) 
+                && this.routingTable[method].ContainsKey(path);
         }
 
         public Func<IHttpRequest, IHttpResponse> Get(HttpRequestMethod method, string path)

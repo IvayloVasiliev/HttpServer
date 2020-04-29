@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SIS.MvcFramework.Mapping
 {
@@ -12,6 +10,12 @@ namespace SIS.MvcFramework.Mapping
             return collection
                 .Select(ModelMapper.ProjectTo<TDestination>)
                 .ToList();
+        }
+
+        public static TDestination To<TDestination>(this object obj)
+        {
+            return ModelMapper.ProjectTo<TDestination>(obj);
+
         }
     }
 }
