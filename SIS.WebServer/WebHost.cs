@@ -6,11 +6,13 @@
     using SIS.MvcFramework.Attributes;
     using SIS.MvcFramework.Attributes.Action;
     using SIS.MvcFramework.Attributes.Security;
+    using SIS.MvcFramework.Attributes.Validation;
     using SIS.MvcFramework.DependencyContainer;
     using SIS.MvcFramework.Logging;
     using SIS.MvcFramework.Results;
     using SIS.MvcFramework.Routing;
     using SIS.MvcFramework.Sessions;
+    using SIS.MvcFramework.Validation;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
@@ -19,6 +21,8 @@
 
     public static class WebHost
     {
+        private static readonly IControllerState controllerState = new ControllerState();
+
         public static void Start(IMvcApplication application)
         {
             IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
@@ -88,6 +92,7 @@
         {
             //request => new UsersController().Login(request))
             var controllerInstance = serviceProvider.CreateInstance(contollerType) as Controller;
+            controllerState.SetState(controllerInstance);
             controllerInstance.Request = request;
 
             //Security Authorization
@@ -131,9 +136,9 @@
                     var properties = parameter.ParameterType.GetProperties();
                     foreach (var property in properties)
                     {
-                        ISet<string> propertyHttpDataValue = TryGetHttpParameter(request, parameter.Name);
+                        ISet<string> propertyHttpDataValue = TryGetHttpParameter(request, property.Name);
 
-                        if (parameter.ParameterType.GetInterfaces().Any(
+                        if (property.PropertyType.GetInterfaces().Any(
                                 i => i.IsGenericType &&
                                     i.GetGenericTypeDefinition() == typeof(IEnumerable<>))&&
                                 property.PropertyType != typeof(string))
@@ -154,7 +159,13 @@
                         }
                     }
 
-
+                    if (request.RequestMethod == HttpRequestMethod.Post)
+                    {
+                        controllerState.Reset();
+                        controllerInstance.ModelState = ValidateObject(parameterValue);
+                        controllerState.Initialize(controllerInstance);
+                    }
+                    
                     parameterValues.Add(parameterValue);
                 }
 
@@ -162,6 +173,35 @@
 
             var responce = action.Invoke(controllerInstance, parameterValues.ToArray()) as ActionResult;
             return responce;
+        }
+
+        private static ModelStateDictionary ValidateObject(object value)
+        {
+            var modelState = new ModelStateDictionary();
+
+            var objectProperties = value.GetType().GetProperties();
+
+            foreach (var objectProperty in objectProperties)
+            {
+                var validationAttributes = objectProperty
+                    .GetCustomAttributes()
+                    .Where(type => type is ValidationSisAttribute)
+                    .Cast<ValidationSisAttribute>()
+                    .ToList();
+
+                foreach (var validationAttribute in validationAttributes)
+                {
+                    if (validationAttribute.IsValid(objectProperty.GetValue(value)))
+                    {
+                        continue;
+                    }
+
+                    modelState.IsValid = false;
+                    modelState.Add(objectProperty.Name, validationAttribute.ErrorMessage);
+                }
+            }
+
+            return modelState;
         }
 
         private static ISet<string> TryGetHttpParameter(IHttpRequest request, string parameterName)

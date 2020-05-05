@@ -31,6 +31,11 @@
         [HttpPost]
         public IActionResult Create(CreateInputModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return this.Redirect("/");
+            }
+
             Track trackFromDb = new Track
             {
                 Name = model.Name,
