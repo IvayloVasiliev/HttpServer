@@ -29,9 +29,7 @@
             if (allAlbums.Count != 0)
             {
                 return this.View(allAlbums.Select(ModelMapper
-                  .ProjectTo<AlbumAllViewModel>).ToList());
-                //return this.View(allAlbums.Select(album => ModelMapper
-                //.ProjectTo<AlbumAllViewModel>(album)).ToList());
+                  .ProjectTo<AlbumAllViewModel>).ToList());               
             }
 
             return this.View(new List<AlbumAllViewModel>());

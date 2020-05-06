@@ -34,9 +34,10 @@
         }
 
         [HttpPost]
-        public ActionResult Login(string username, string password)
+        public ActionResult Login(UserLoginInputModel model)
         {
-            User userFromDb = this.userService.GetUserByUsernameAndPassword(username, this.HashPassword(password));
+            User userFromDb = this.userService.GetUserByUsernameAndPassword
+                (model.Username, this.HashPassword(model.Password));
 
             if (userFromDb == null)
             {
@@ -54,7 +55,7 @@
         }
 
         [HttpPost]
-        public ActionResult Register(RegisterInputModel model)
+        public ActionResult Register(UserRegisterInputModel model)
         {
             if (!ModelState.IsValid)
             {

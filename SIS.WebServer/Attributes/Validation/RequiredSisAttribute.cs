@@ -1,12 +1,12 @@
 ﻿namespace SIS.MvcFramework.Attributes.Validation
 {
-    public class RerquiredSisAttribute : ValidationSisAttribute
+    public class RequiredSisAttribute : ValidationSisAttribute
     {
-        public RerquiredSisAttribute()
+        public RequiredSisAttribute()
         {
 
         }
-        public RerquiredSisAttribute(string errorMessage) : base(errorMessage)
+        public RequiredSisAttribute(string errorMessage) : base(errorMessage)
         {
 
         }

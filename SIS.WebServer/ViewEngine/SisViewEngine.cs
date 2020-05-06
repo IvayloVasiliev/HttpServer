@@ -28,7 +28,9 @@ namespace SIS.MvcFramework.ViewEngine
         public string GetHtml<T>(string viewContent, T model, ModelStateDictionary modelState,
             Principal user = null)
         {
-            string csharpHtmlCode = this.GetCSharpCode(viewContent);
+            string csharpHtmlCode = string.Empty;
+            csharpHtmlCode = this.CheckForWidgets(viewContent);
+            csharpHtmlCode = this.GetCSharpCode(csharpHtmlCode);
             string code = $@"
 using System;
 using System.Net;
@@ -57,6 +59,31 @@ namespace AppViewCodeNamespace
             var view = this.CompileAndInstance(code, model?.GetType().Assembly);
             var htmlResult = view?.GetHtml(model, modelState, user);
             return htmlResult;
+        }
+
+        private string CheckForWidgets(string viewContent)
+        {
+            var widgets = Assembly
+                .GetEntryAssembly()? 
+                .GetTypes()
+                .Where(type => typeof(IViewWidget).IsAssignableFrom(type))
+                .Select(x => (IViewWidget)Activator.CreateInstance(x))
+                .ToList();
+
+            if (widgets == null || widgets.Count == 0)
+            {
+                return viewContent;
+            }
+            //@Widgets.ValidationWidget
+            string widgetPrefix = "@Widgets.";
+
+            foreach (var viewWidget in widgets)
+            {
+                viewContent = viewContent.Replace($"{widgetPrefix}{viewWidget.GetType().Name}"
+                    , viewWidget.Render());
+            }
+
+            return viewContent;
         }
 
         private string GetCSharpCode(string viewContent)

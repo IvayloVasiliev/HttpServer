@@ -5,6 +5,11 @@ namespace SIS.MvcFramework.Attributes.Validation
 {
     public class EmailSisAttribute : ValidationSisAttribute
     {
+        public EmailSisAttribute()
+        {
+               
+        }
+
         public EmailSisAttribute(string errorMessage) : base(errorMessage)
         {
         }

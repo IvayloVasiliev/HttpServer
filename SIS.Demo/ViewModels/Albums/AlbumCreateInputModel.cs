@@ -10,11 +10,11 @@ namespace IRunes.App.ViewModels.Albums
         private const string CoverErrorMessage = "Inavalid Length! Cover must be between" +
             " 5 and 255 symbols!";
 
-        [RerquiredSis]
+        [RequiredSis]
         [StringLengthSis(3, 30, NameErrorMessage)]
         public string Name { get; set; }
 
-        [RerquiredSis]
+        [RequiredSis]
         [StringLengthSis(3, 255, CoverErrorMessage)]
         public string Cover { get; set; }
     }
