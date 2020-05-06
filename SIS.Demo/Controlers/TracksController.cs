@@ -22,7 +22,7 @@
         }
 
         [Authorize]
-        public ActionResult Create(string albumId)
+        public IActionResult Create(string albumId)
         {
             return this.View(new TrackCreateViewModel { AlbumId = albumId});
         }
@@ -36,14 +36,9 @@
                 return this.Redirect("/");
             }
 
-            Track trackFromDb = new Track
-            {
-                Name = model.Name,
-                Link = model.Link,
-                Price = model.Price
-            }; 
+            Track track = ModelMapper.ProjectTo<Track>(model);
 
-            if (!this.albumService.AddTrackToAlbum(model.AlbumId, trackFromDb))
+            if (!this.albumService.AddTrackToAlbum(model.AlbumId, track))
             {
                 return this.Redirect("/Albums/All");
             }
@@ -53,7 +48,7 @@
 
 
         [Authorize]
-        public ActionResult Details(TrackDetailsInputModel model)
+        public IActionResult Details(TrackDetailsInputModel model)
         {
             if (!ModelState.IsValid)
             {

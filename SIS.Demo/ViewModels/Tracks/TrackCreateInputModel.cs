@@ -6,7 +6,7 @@ namespace IRunes.App.ViewModels.Tracks
     {
         private const string NameErrorMessage = "Track name must be between 3 and 20 symbols!";
 
-        private const string LinkErrorMessage = "Link name must be between 3 and 20 symbols!";
+        private const string LinkErrorMessage = "Link name must be between 3 and 50 symbols!";
 
         private const string PriceErrorMessage = "Invalid price!";
 
@@ -18,7 +18,7 @@ namespace IRunes.App.ViewModels.Tracks
         public string Name { get; set; }
 
         [RequiredSis]
-        [StringLengthSis(3, 20, LinkErrorMessage)]
+        [StringLengthSis(4, int.MaxValue, LinkErrorMessage)]
         public string Link { get; set; }
 
         [RangeSis(typeof(decimal), "0.00", "79228162514264337593543950335", PriceErrorMessage)]

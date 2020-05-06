@@ -28,13 +28,13 @@
             }
         }
 
-        public ActionResult Login()
+        public IActionResult Login()
         {
             return this.View();
         }
 
         [HttpPost]
-        public ActionResult Login(UserLoginInputModel model)
+        public IActionResult Login(UserLoginInputModel model)
         {
             User userFromDb = this.userService.GetUserByUsernameAndPassword
                 (model.Username, this.HashPassword(model.Password));
@@ -49,13 +49,13 @@
             return Redirect("/");
         }
 
-        public ActionResult Register()
+        public IActionResult Register()
         {
             return this.View();
         }
 
         [HttpPost]
-        public ActionResult Register(UserRegisterInputModel model)
+        public IActionResult Register(UserRegisterInputModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -78,7 +78,7 @@
             return this.Redirect("/Users/Login");
         }
 
-        public ActionResult Logout()
+        public IActionResult Logout()
         {
             this.SignOut();
 

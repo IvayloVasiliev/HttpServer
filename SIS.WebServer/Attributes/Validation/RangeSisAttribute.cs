@@ -8,8 +8,8 @@ namespace SIS.MvcFramework.Attributes.Validation
         private readonly object maxValue;
         private readonly Type objectType;
 
-        public RangeSisAttribute(int minValue, int maxValue, string errorMessage) 
-            : base(errorMessage)
+        public RangeSisAttribute(int minValue, int maxValue, string errorMessage)
+        : base(errorMessage)
         {
             this.minValue = minValue;
             this.maxValue = maxValue;
@@ -25,7 +25,7 @@ namespace SIS.MvcFramework.Attributes.Validation
         }
 
         public RangeSisAttribute(Type type, string minValue, string maxValue, string errorMessage)
-           : base(errorMessage)
+            : base(errorMessage)
         {
             this.minValue = minValue;
             this.maxValue = maxValue;
@@ -46,7 +46,7 @@ namespace SIS.MvcFramework.Attributes.Validation
 
             if (objectType == typeof(decimal))
             {
-                return (decimal)value >= (decimal)minValue && (decimal)value <= (decimal)maxValue;
+                return (decimal)value >= decimal.Parse((string)minValue) && (decimal)value <= decimal.Parse((string)maxValue);
             }
 
             return false;

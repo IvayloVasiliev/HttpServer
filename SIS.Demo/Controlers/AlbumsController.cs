@@ -36,7 +36,7 @@
         }
 
         [Authorize]
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return this.View();
         }
@@ -44,19 +44,14 @@
 
         [Authorize]
         [HttpPost]
-        public ActionResult Create(AlbumCreateInputModel model)
+        public IActionResult Create(AlbumCreateInputModel model)
         {
             if (!ModelState.IsValid)
             {
                 return this.Redirect("/Albums/Create");
             }
 
-            Album album = new Album
-            {
-                Name = model.Name,
-                Cover = model.Cover,
-                Price = 0M
-            };
+            Album album = ModelMapper.ProjectTo<Album>(model);
 
             this.albumService.CreateAlbum(album);
             return this.Redirect("/Albums/All");
