@@ -1,4 +1,5 @@
 ﻿using Panda.Data;
+using Panda.Services;
 using SIS.MvcFramework;
 using SIS.MvcFramework.Routing;
 
@@ -18,7 +19,7 @@ namespace Panda.Web
 
         public void ConfigureServices(SIS.MvcFramework.DependencyContainer.IServiceProvider serviceProvider)
         {
-            //serviceProvider.Add
+            serviceProvider.Add<IUsersService, UsersService>();
         }
     }
 }
