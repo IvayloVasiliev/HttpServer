@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Demo.Data\IRunes.Data.csproj" />
     <ProjectReference Include="..\Panda.Data\Panda.Data.csproj" />
   </ItemGroup>
 
