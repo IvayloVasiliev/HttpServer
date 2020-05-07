@@ -1,6 +1,7 @@
 ﻿using Panda.Data;
 using Panda.Data.Models;
 using System;
+using System.Linq;
 
 namespace Panda.Services
 {
@@ -25,6 +26,12 @@ namespace Panda.Services
 
             this.db.Receipts.Add(receipt);
             this.db.SaveChanges();
+        }
+
+        public IQueryable<Receipt> GetAll()
+        {
+            return db.Receipts;
+           
         }
     }
 }

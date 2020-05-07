@@ -1,7 +1,12 @@
-﻿namespace Panda.Services
+﻿using Panda.Data.Models;
+using System.Linq;
+
+namespace Panda.Services
 {
     public interface IReceiptsService
     {
         void CreateFromPackage(decimal weight, string packageId, string recepientId);
+
+        IQueryable<Receipt> GetAll();
     }
 }
